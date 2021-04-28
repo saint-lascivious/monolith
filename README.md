@@ -16,7 +16,7 @@ monolith is a simple tool for fetching and condensing arbitrarily large amounts 
 ## Usage
 ```
 cd ~
-sudo wget https://raw.githubusercontent.com/saint-lascivious/monolith/main/monolith
+wget https://raw.githubusercontent.com/saint-lascivious/monolith/main/monolith
 chmod +x monolith
 ./monolith
 ```
