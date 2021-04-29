@@ -4,7 +4,7 @@
 # you could probably do this in one line if you really wanted to
 
 download_lists() {
-	echo "downloading list sources ..."
+	echo "downloading lists ..."
 	echo -e "\tthis may take some time"
 	mkdir .monolith
 	wget --directory-prefix=.monolith --input-file=lists --quiet --show-progress
@@ -14,8 +14,8 @@ download_lists() {
 download_lists
 
 cat_lists() {
-	echo "combining list sources ..."
-	cat .monolith/* > raw_list
+	echo "combining lists ..."
+	cat .monolith/* > .monolith/raw_list
 	echo -e "\t- done\n"
 }
 
@@ -24,16 +24,16 @@ cat_lists
 sort_list() {
 	echo "sorting combined list ..."
 	echo -e "\tthis may take some time"
-	sort -b -u raw_list > sorted_list
+	sort -b -u .monolith/raw_list > .monolith/sorted_list
 	echo -e "\t- done\n"
 }
 
 sort_list
 
 strip_list() {
-	echo "stripping comments from sorted list ..."
+	echo "stripping sorted list ..."
 	echo -e "\tthis may take some time"
-	sed '/^#/ d' < sorted_list > monolithic_list
+	sed -e "/^#/ d" -e "s/^0.0.0.0 //" -e "s/^0.0.0.0     //" -e "s/0.0.0.0//" -e "s/^127.0.0.1 //" -e "s/127.0.0.1    //" -e "s/127.0.0.1//" < .monolith/sorted_list > monolithic_list
 	echo -e "\t- done\n"
 }
 
@@ -42,13 +42,7 @@ strip_list
 cleanup() {
 	echo "removing unneeded files ..."
 	if [ -d .monolith ]; then
-		rm -f .monolith
-	fi
-	if [ -f raw_list ]; then
-		rm raw_list
-	fi
-	if [ -f sorted_list]; then
-		rm sorted_list
+		rm -r .monolith
 	fi
 	echo -e "\t- done\n"
 }
