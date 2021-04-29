@@ -3,15 +3,32 @@
 # none of these need to be functions
 # you could probably do this in one line if you really wanted to
 
+cleanup() {
+	if [ -d .monolith ]; then
+		echo "removing unneeded files ..."
+		rm -r .monolith
+		echo -e "\t- done\n"
+	fi
+}
+
+cleanup
+
+
 download_lists() {
 	echo "downloading lists ..."
-	echo -e "\tthis may take some time"
-	mkdir .monolith
-	wget --directory-prefix=.monolith --input-file=lists --quiet --show-progress
+	if [ -f lists]; then
+		echo -e "\tthis may take some time"
+		mkdir .monolith
+		wget --directory-prefix=.monolith --input-file=lists --quiet --show-progress
+	else
+		echo -e "\tno lists file found"
+		exit 1
+	fi
 	echo -e "\t- done\n"
 }
 
 download_lists
+
 
 cat_lists() {
 	echo "combining lists ..."
@@ -20,6 +37,7 @@ cat_lists() {
 }
 
 cat_lists
+
 
 sort_list() {
 	echo "sorting combined list ..."
@@ -30,21 +48,15 @@ sort_list() {
 
 sort_list
 
+
 strip_list() {
 	echo "stripping sorted list ..."
 	echo -e "\tthis may take some time"
-	sed -e "/^#/ d" -e "s/^0.0.0.0 //" -e "s/^0.0.0.0     //" -e "s/0.0.0.0//" -e "s/^127.0.0.1 //" -e "s/127.0.0.1    //" -e "s/127.0.0.1//" < .monolith/sorted_list > monolithic_list
+	sed -e "/^#/ d" -e "s/^0.0.0.0 //" -e "s/^0.0.0.0	//" -e "s/0.0.0.0//" -e "s/^127.0.0.1 //" -e "s/127.0.0.1	//" -e "s/127.0.0.1//" < .monolith/sorted_list > monolithic_list
 	echo -e "\t- done\n"
 }
 
 strip_list
 
-cleanup() {
-	echo "removing unneeded files ..."
-	if [ -d .monolith ]; then
-		rm -r .monolith
-	fi
-	echo -e "\t- done\n"
-}
 
 cleanup
