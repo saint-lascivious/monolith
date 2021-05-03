@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 
-# none of these need to be functions
-# you could probably do this in one line if you really wanted to
+# monolith
 
+# ever wanted to smash a bunch of host files together with a shitty bash script? ...me neither
+
+# monolith is a simple tool for fetching and condensing arbitrarily large amounts of host file sources 
+
+export LC_ALL=C
+
+# pre-run cleanup to gracefully recover from failed or aborted runs
 cleanup() {
 	if [ -d .monolith ]; then
 		echo "removing unneeded files ..."
@@ -18,9 +24,13 @@ download_lists() {
 	echo "downloading lists ..."
 	if [ -f lists]; then
 		echo -e "\tthis may take some time"
+		# create a direcotry to work in for the duration of the runtime
 		mkdir .monolith
+		# assumes a 'lists' file is present in the current working directory
+		# which assuming people read the documentation should be true
 		wget --directory-prefix=.monolith --input-file=lists --quiet --show-progress
 	else
+		# but people won't
 		echo -e "\tno lists file found"
 		exit 1
 	fi
@@ -31,6 +41,7 @@ download_lists
 
 
 cat_lists() {
+	# this function gets a comment just so it doesn't feel left out
 	echo "combining lists ..."
 	cat .monolith/* > .monolith/raw_list
 	echo -e "\t- done\n"
@@ -42,6 +53,7 @@ cat_lists
 sort_list() {
 	echo "sorting combined list ..."
 	echo -e "\tthis may take some time"
+	# ensure uniqueness of list entries
 	sort -b -u .monolith/raw_list > .monolith/sorted_list
 	echo -e "\t- done\n"
 }
@@ -52,11 +64,30 @@ sort_list
 strip_list() {
 	echo "stripping sorted list ..."
 	echo -e "\tthis may take some time"
-	sed -e "/^#/ d" -e "s/^0.0.0.0 //" -e "s/^0.0.0.0	//" -e "s/0.0.0.0//" -e "s/^127.0.0.1 //" -e "s/127.0.0.1	//" -e "s/127.0.0.1//" < .monolith/sorted_list > monolithic_list
+	# ¯\_(ツ)_/¯
+	# attempt to stript comments and localhost redirection and leave only bare domains
+	# trailing comments aren't processed as yet
+	sed -e "/^#/ d" -e "s/^0.0.0.0 //" -e "s/^0.0.0.0	//" -e "s/0.0.0.0//" -e "s/^127.0.0.1 //" -e "s/127.0.0.1	//" -e "s/127.0.0.1//" < .monolith/sorted_list > .monolith/stripped_list
 	echo -e "\t- done\n"
 }
 
 strip_list
 
 
+package_list() {
+	# use YYYYMMDD, the universally regarded superior date format
+	timestamp="$(date '+%Y%m%d%H%M')"
+	echo "packaging list ..."
+	# package the output as a versioned .tar.gz archive
+	# saves some space and lazily ensures we don't accidentally wipe out prior runs
+	tar -zcf "monolith_$timestamp.tar.gz" .monolith/stripped_list
+	echo -e "\t- done\n"
+	# hint at the file output name
+	echo "output saved as monolith_YYYYMMDDHHMM.tar.gz"
+}
+
+package_list
+
+
+# post-run cleanup
 cleanup
