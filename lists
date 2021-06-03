@@ -24,9 +24,8 @@ https://v.firebog.net/hosts/Prigent-Ads.txt
 https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts
 https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
 https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
-https://raw.githubusercontent.com/Kees1958/W3C_annual_most_used_survey_blocklist/master/TOP_EU_US_Ads_Trackers_HOST
 https://hostfiles.frogeye.fr/multiparty-trackers-hosts.txt
-https://www.github.developerdan.com/hosts/lists/tracking-aggressive-extended.txt
+https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt
 https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/android-tracking.txt
 https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/SmartTV.txt
 https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/AmazonFireTV.txt
@@ -45,5 +44,5 @@ https://urlhaus.abuse.ch/downloads/hostfile/
 https://v.firebog.net/hosts/Prigent-Malware.txt
 https://raw.githubusercontent.com/HorusTeknoloji/TR-PhishingList/master/url-lists.txt
 https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser
-https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt
-https://hosts.oisd.nl/
+https://www.github.developerdan.com/hosts/lists/tracking-aggressive-extended.txt
+https://dbl.oisd.nl
